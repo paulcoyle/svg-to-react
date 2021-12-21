@@ -1,6 +1,12 @@
 {
   "name": "@paulcoyle/svg-to-react",
   "description": "An opinionated utility for converting SVG files to React components.",
+  "keywords": [
+    "svg",
+    "react",
+    "utility",
+    "converter"
+  ],
   "version": "1.0.0",
   "cli": "dist/cli.js",
   "bin": {
