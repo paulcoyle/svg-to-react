@@ -1,0 +1,17 @@
+{
+  "output": "./dist",
+  "copy": ["LICENSE", "README.md"],
+  "remove": {
+    "devDependencies": "*",
+    "scripts": "*",
+    "cli": true,
+    "targets": true,
+    "type": true
+  },
+  "replace": {
+    "bin": {
+      "svg-to-react": "cli.js"
+    }
+  },
+  "publisher": "npm"
+}
