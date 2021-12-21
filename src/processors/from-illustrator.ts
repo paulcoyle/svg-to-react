@@ -41,8 +41,9 @@
 
 import { optimize as optimizeSvg } from 'svgo'
 
+import { Config } from '~/src/config'
 import { ProcessedFile } from '~/src/processed-file'
-import { addAttribute, PseudoAstElement } from '~/src/svgo'
+import { addAttribute, PseudoAstElement, removeAttribute } from '~/src/svgo'
 
 
 const svgoPlugin = {
@@ -52,18 +53,22 @@ const svgoPlugin = {
   fn: (elem: PseudoAstElement) => {
     const attrs = preparedValuesFromElement(elem)
 
-    elem.removeAttr('id')
+    removeAttribute(elem, 'id')
     // Illustrator will assign `data-name` as the layer name when two layers
     // have the same name, modifying the IDs to be unique.
-    elem.removeAttr('data-name')
-    elem.removeAttr('class')
+    removeAttribute(elem, 'data-name')
+    removeAttribute(elem, 'class')
 
     // Only apply prepared values to non-root elements; the root svg node should
     // be clean for mutations in later processes as it is often used to set
     // prop bindings as refs, etc.
-    if (!elem.isElem('svg')) {
-      attrs.id && addAttribute(elem, 'id', attrs.id)
-      attrs.classNames && addAttribute(elem, 'className', attrs.classNames)
+    if (elem.name !== 'svg') {
+      if (attrs.id) {
+        addAttribute(elem, 'id', attrs.id)
+      }
+      if (attrs.classNames) {
+        addAttribute(elem, 'class', attrs.classNames)
+      }
       attrs.dataAttrs.forEach(({ name, value }) => {
         addAttribute(elem, `data-${name}`, value)
       })
@@ -73,7 +78,7 @@ const svgoPlugin = {
   },
 }
 
-export const step = async (outputFile: ProcessedFile) => {
+export const step = async (_: Config, outputFile: ProcessedFile) => {
   const optimized = optimizeSvg(outputFile.content, {
     plugins: [svgoPlugin],
   })
@@ -94,7 +99,7 @@ type DataAttribute = {
 
 function preparedValuesFromElement(elem: PseudoAstElement) {
   // Skip case
-  if (elem.attrs?.id?.value?.charAt(0) === '_') {
+  if (elem.attributes?.id?.charAt(0) === '_') {
     return { id: null, classNames: null, dataAttrs: [] }
   }
 
@@ -110,8 +115,8 @@ function preparedValuesFromElement(elem: PseudoAstElement) {
 function getRawAttributesFromElement(
   elem: PseudoAstElement,
 ): [string?, string?, string?] {
-  const sourceAttr = elem.attrs?.['data-name'] ?? elem.attrs?.id
-  const maybeValues = sourceAttr?.value?.split(typeDelimiter) ?? []
+  const sourceAttr = elem.attributes?.['data-name'] ?? elem.attributes?.id
+  const maybeValues = sourceAttr?.split(typeDelimiter) ?? []
   return [maybeValues[0], maybeValues[1], maybeValues[2]]
 }
 

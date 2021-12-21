@@ -6,14 +6,10 @@ export type PseudoAstAttr = {
 }
 
 export type PseudoAstElement = {
-  attrs?: {
-    [key: string]: {
-      value?: string
-    }
-  }
-  addAttr(attr: PseudoAstAttr): void
-  isElem(elemName: string): boolean
-  removeAttr(name: string): void
+  type: string
+  name: string
+  attributes: Record<string, string>
+  children: PseudoAstElement[]
 }
 
 export function addAttribute(
@@ -22,13 +18,12 @@ export function addAttribute(
   value?: string,
 ) {
   if (name && value) {
-    elem.addAttr({
-      name: name,
-      value: value,
-      prefix: '',
-      local: name,
-    })
+    elem.attributes[name] = value
   }
+}
+
+export function removeAttribute(elem: PseudoAstElement, name: string) {
+  delete elem.attributes[name]
 }
 
 export function renameAttribute(
@@ -36,10 +31,9 @@ export function renameAttribute(
   from: string,
   to: string,
 ) {
-  if (elem.attrs && elem.attrs[from] && elem.attrs[from].value !== undefined) {
-    const value = elem.attrs[from].value
-    elem.removeAttr(from)
-    addAttribute(elem, to, value)
+  if (from in elem.attributes) {
+    addAttribute(elem, to, elem.attributes[from])
+    removeAttribute(elem, from)
   }
 }
 
@@ -48,7 +42,7 @@ export function replaceAttribute(
   name: string,
   replacer: (value?: string) => string,
 ) {
-  if (elem.attrs && elem.attrs[name]) {
-    elem.attrs[name].value = replacer(elem.attrs[name].value)
+  if (name in elem.attributes) {
+    elem.attributes[name] = replacer(elem.attributes[name])
   }
 }
