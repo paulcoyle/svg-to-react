@@ -41,10 +41,8 @@
 
 import { optimize as optimizeSvg } from 'svgo'
 
-import { Config } from '~/src/config'
-import { ProcessedFile } from '~/src/processed-file'
+import { Stage } from '~/src/stage'
 import { addAttribute, PseudoAstElement, removeAttribute } from '~/src/svgo'
-
 
 const svgoPlugin = {
   name: 'customFromIllustratorPlugin',
@@ -78,12 +76,12 @@ const svgoPlugin = {
   },
 }
 
-export const step = async (_: Config, outputFile: ProcessedFile) => {
-  const optimized = optimizeSvg(outputFile.content, {
-    plugins: [svgoPlugin],
-  })
-  return { ...outputFile, content: optimized.data }
+const stage: Stage = async (_, file) => {
+  const content = optimizeSvg(file.output.content, { plugins: [svgoPlugin] })
+  return { ...file, output: { ...file.output, content: content.data } }
 }
+
+export default stage
 
 /**
  * Transforms of layer names into markup attributes.
@@ -108,7 +106,7 @@ function preparedValuesFromElement(elem: PseudoAstElement) {
   return {
     id: prepareIdForElement(id),
     classNames: prepareClassNamesForElement(classNames),
-    dataAttrs: prepateDataAttributesForElement(dataAttrs),
+    dataAttrs: prepareDataAttributesForElement(dataAttrs),
   }
 }
 
@@ -132,7 +130,7 @@ function prepareClassNamesForElement(classNames?: string): string | null {
   return classNames?.split(intraTypeDelimiter).join(' ') ?? null
 }
 
-function prepateDataAttributesForElement(dataAttrs?: string): DataAttribute[] {
+function prepareDataAttributesForElement(dataAttrs?: string): DataAttribute[] {
   if (dataAttrs === undefined) {
     return []
   } else {

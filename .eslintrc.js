@@ -18,7 +18,7 @@ module.exports = {
         ignoreRestSiblings: true,
       },
     ],
-    'import/newline-after-import': ['error', { count: 2 }],
+    'import/newline-after-import': ['error', { count: 1 }],
     'import/order': [
       'error',
       {

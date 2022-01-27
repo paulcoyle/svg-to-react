@@ -1,10 +1,8 @@
 import { optimize as optimizeSvg } from 'svgo'
 
-import { Config } from '~/src/config'
-import { ProcessStep } from '~/src/process-step'
-import { ProcessedFile } from '~/src/processed-file'
+import { Config } from '~/src/options'
+import { Stage } from '~/src/stage'
 import { addAttribute, PseudoAstElement, removeAttribute } from '~/src/svgo'
-
 
 function instantiatePlugin(config: Config) {
   return {
@@ -43,12 +41,11 @@ function replacePositionally(values: string[], target: string): string {
   )
 }
 
-export const step: ProcessStep = async (
-  config: Config,
-  outputFile: ProcessedFile,
-) => {
-  const optimized = optimizeSvg(outputFile.content, {
-    plugins: [instantiatePlugin(config)],
+const stage: Stage = async (options, file) => {
+  const optimized = optimizeSvg(file.output.content, {
+    plugins: [instantiatePlugin(options.config)],
   })
-  return { ...outputFile, content: optimized.data }
+  return { ...file, output: { ...file.output, content: optimized.data } }
 }
+
+export default stage

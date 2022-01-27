@@ -1,10 +1,7 @@
 import { optimize as optimizeSvg } from 'svgo'
 
-import { Config } from '~/src/config'
-import { ProcessStep } from '~/src/process-step'
-import { ProcessedFile } from '~/src/processed-file'
+import { Stage } from '~/src/stage'
 import { PseudoAstElement, renameAttribute } from '~/src/svgo'
-
 
 const attributeToReactMap: Record<string, string> = {
   class: 'className',
@@ -33,12 +30,11 @@ const reactPropsPlugin = {
   },
 }
 
-export const step: ProcessStep = async (
-  _: Config,
-  outputFile: ProcessedFile,
-) => {
-  const optimized = optimizeSvg(outputFile.content, {
+const stage: Stage = async (_, file) => {
+  const optimized = optimizeSvg(file.output.content, {
     plugins: [reactPropsPlugin],
   })
-  return { ...outputFile, content: optimized.data }
+  return { ...file, output: { ...file.output, content: optimized.data } }
 }
+
+export default stage
