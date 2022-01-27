@@ -25,7 +25,7 @@ import { defaultTemplate, generateComponentsFromTemplate } from './template'
 Log.plain(pc.dim('[svg-to-react]'))
 
 program
-  .version('1.0.0')
+  .version('1.1.0')
   .argument('<input-dir>', 'the input directory to read .svg files from')
   .argument('<output-dir>', 'the output directory to write components to')
   .option('-t, --template <path>', 'path to an EJS template for the components')
