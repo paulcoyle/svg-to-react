@@ -4,7 +4,7 @@ import { compile, TemplateFunction } from 'ejs'
 
 import { toAbsolutePath } from '~/src/file'
 import { Stage } from '~/src/stage'
-import { capitalize, kebabToCamel } from '~/src/strings'
+import { capitalize, kebabToCamel } from '~/src/util/strings'
 
 const templateCache = new Map<string, TemplateFunction>()
 

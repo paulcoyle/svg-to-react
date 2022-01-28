@@ -1,7 +1,7 @@
 import { optimize as optimizeSvg } from 'svgo'
 
 import { Stage } from '~/src/stage'
-import { PseudoAstElement, renameAttribute } from '~/src/svgo'
+import { PseudoAstElement, renameAttribute } from '~/src/util/svgo'
 
 const attributeToReactMap: Record<string, string> = {
   class: 'className',

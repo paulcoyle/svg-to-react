@@ -3,7 +3,7 @@ import { readFile } from 'fs/promises'
 import { OptionValues } from 'commander'
 
 import { toAbsolutePath } from '~/src/file'
-import * as Log from '~/src/log'
+import * as Log from '~/src/util/log'
 
 export type Options = Readonly<{
   config: Config

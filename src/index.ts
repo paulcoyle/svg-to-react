@@ -6,9 +6,7 @@ import { join } from 'path'
 import { program } from 'commander'
 import pc from 'picocolors'
 
-import { glob } from './file'
-import * as Log from './log'
-
+import { glob } from '~/src/file'
 import * as File from '~/src/file'
 import * as Options from '~/src/options'
 import * as Stage from '~/src/stage'
@@ -20,11 +18,12 @@ import stageReactProps from '~/src/stage/preprocess/react-props'
 import stageReplacement from '~/src/stage/preprocess/replacement'
 import stageSetByMatch from '~/src/stage/preprocess/set-by-match'
 import stageSvgCommon from '~/src/stage/preprocess/svg-common'
+import * as Log from '~/src/util/log'
 
 Log.plain(pc.dim('[svg-to-react]'))
 
 program
-  .version('1.1.1')
+  .version('1.2.0')
   .argument('<input-dir>', 'the input directory to read .svg files from')
   .argument('<output-dir>', 'the output directory to write components to')
   .option('-t, --template <path>', 'path to an EJS template for the components')
