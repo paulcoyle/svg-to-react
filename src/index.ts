@@ -6,9 +6,7 @@ import { join } from 'path'
 import { program } from 'commander'
 import pc from 'picocolors'
 
-import { glob } from './file'
-import * as Log from './log'
-
+import { glob } from '~/src/file'
 import * as File from '~/src/file'
 import * as Options from '~/src/options'
 import * as Stage from '~/src/stage'
@@ -20,6 +18,7 @@ import stageReactProps from '~/src/stage/preprocess/react-props'
 import stageReplacement from '~/src/stage/preprocess/replacement'
 import stageSetByMatch from '~/src/stage/preprocess/set-by-match'
 import stageSvgCommon from '~/src/stage/preprocess/svg-common'
+import * as Log from '~/src/util/log'
 
 Log.plain(pc.dim('[svg-to-react]'))
 

@@ -1,6 +1,5 @@
 import pc from 'picocolors'
 
-
 export function plain(message: string) {
   console.log(message)
 }

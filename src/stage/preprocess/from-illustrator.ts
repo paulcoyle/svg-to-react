@@ -42,7 +42,11 @@
 import { optimize as optimizeSvg } from 'svgo'
 
 import { Stage } from '~/src/stage'
-import { addAttribute, PseudoAstElement, removeAttribute } from '~/src/svgo'
+import {
+  addAttribute,
+  PseudoAstElement,
+  removeAttribute,
+} from '~/src/util/svgo'
 
 const svgoPlugin = {
   name: 'customFromIllustratorPlugin',

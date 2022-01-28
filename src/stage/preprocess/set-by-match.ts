@@ -2,7 +2,11 @@ import { optimize as optimizeSvg } from 'svgo'
 
 import { Config } from '~/src/options'
 import { Stage } from '~/src/stage'
-import { addAttribute, PseudoAstElement, removeAttribute } from '~/src/svgo'
+import {
+  addAttribute,
+  PseudoAstElement,
+  removeAttribute,
+} from '~/src/util/svgo'
 
 function instantiatePlugin(config: Config) {
   return {
