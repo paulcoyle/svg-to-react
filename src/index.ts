@@ -14,6 +14,7 @@ import * as Options from '~/src/options'
 import * as Stage from '~/src/stage'
 import stageSvgToTsx from '~/src/stage/convert/svg-to-tsx'
 import stageFinalizeReactProps from '~/src/stage/postprocess/finalize-react-props'
+import stageFormat from '~/src/stage/postprocess/format'
 import stageFromIllustrator from '~/src/stage/preprocess/from-illustrator'
 import stageReactProps from '~/src/stage/preprocess/react-props'
 import stageReplacement from '~/src/stage/preprocess/replacement'
@@ -40,6 +41,7 @@ const stages: Stage.Stage[] = [
   stageReactProps,
   stageSvgToTsx,
   stageFinalizeReactProps,
+  stageFormat,
 ]
 
 async function main() {
