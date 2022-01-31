@@ -9,7 +9,7 @@ const stage: Stage = async (options, file) => {
       { name: 'convertPathData' },
       { name: 'convertTransform' },
       { name: 'removeTitle' },
-      { name: 'removeAttrs', params: { attrs: options.config.removeAttrs } },
+      { name: 'removeAttrs', params: { attrs: options.config.remove } },
     ],
   })
 

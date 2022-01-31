@@ -16,20 +16,20 @@ export type Options = Readonly<{
 export type Config = Readonly<{
   set: Readonly<{
     attrs: Record<string, string>
-    when: Readonly<{
+    when?: Readonly<{
       attr: string
       matches: string
       andRemove?: boolean
     }>
   }>[]
   replace: [string, string][]
-  removeAttrs: string[]
+  remove: string[]
 }>
 
 const defaultConfig: Config = {
   set: [],
   replace: [],
-  removeAttrs: [],
+  remove: [],
 }
 
 export async function prepare(

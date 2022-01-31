@@ -15,22 +15,32 @@ function instantiatePlugin(config: Config) {
     active: true,
     fn: (elem: PseudoAstElement) => {
       config.set.forEach(({ attrs, when }) => {
-        const match =
-          elem.attributes[when.attr]?.match(new RegExp(when.matches)) ?? null
+        let replacements: Record<string, string> = {}
 
-        if (match !== null) {
-          Object.entries(attrs).forEach(([attr, value]) =>
-            addAttribute(
-              elem,
-              attr,
-              replacePositionally(match.slice(1), value),
-            ),
-          )
+        if (when) {
+          const match =
+            elem.attributes[when.attr]?.match(new RegExp(when.matches)) ?? null
 
-          if (when.andRemove) {
-            removeAttribute(elem, when.attr)
+          if (match !== null) {
+            Object.entries(attrs).forEach(
+              ([attr, value]) =>
+                (replacements[attr] = replacePositionally(
+                  match.slice(1),
+                  value,
+                )),
+            )
+
+            if (when.andRemove) {
+              removeAttribute(elem, when.attr)
+            }
           }
+        } else {
+          replacements = attrs
         }
+
+        Object.entries(attrs).forEach(([attr, value]) =>
+          addAttribute(elem, attr, value),
+        )
       })
 
       return elem

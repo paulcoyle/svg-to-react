@@ -25,11 +25,11 @@ const stage: Stage = async (options, file) => {
 export default stage
 
 const defaultTemplate = compile(`
-import { cloneElement, SVGProps } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
-export function <%- componentName %>(props: SVGProps<SVGSVGElement>) {
-  return cloneElement(<%- content %>, props)
-}
+export const <%- componentName %> = React.forwardRef<SVGSVGElement>(function <%- componentName %>(props, ref) {
+  return cloneElement(<svg></svg>, { ...props, ref })
+})
 
 `)
 
