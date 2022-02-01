@@ -5,6 +5,7 @@ import { glob as globLib } from 'glob'
 import { getFileName } from './paths'
 
 import { Options } from '~/src/options'
+import { capitalize, kebabToCamel } from '~/src/util/strings'
 
 export { toAbsolutePath } from './paths'
 
@@ -14,9 +15,15 @@ export type File = {
   content: string
 }
 
+export type InputFile = File
+
+export type OutputFile = File & {
+  componentName: string
+}
+
 export type ProcessFile = {
-  readonly input: Readonly<File>
-  output: File
+  readonly input: Readonly<InputFile>
+  output: OutputFile
 }
 
 export async function fromPaths(
@@ -30,7 +37,12 @@ export async function fromPaths(
 
       return {
         input: { path, name, content },
-        output: { path: '', name, content },
+        output: {
+          path: '',
+          name,
+          componentName: capitalize(kebabToCamel(name)),
+          content,
+        },
       }
     }),
   )
