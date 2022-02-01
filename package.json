@@ -32,7 +32,9 @@
     "lint": "env-cmd eslint --ext .ts .",
     "lint-fix": "npm run lint -- --fix",
     "format": "env-cmd --silent prettier -l **/*.ts",
-    "format-fix": "npm run format -- --write"
+    "format-fix": "npm run format -- --write",
+    "test": "env-cmd jest",
+    "test-watch": "env-cmd jest --watch"
   },
   "author": {
     "name": "Paul Coyle",
@@ -66,6 +68,7 @@
     "packito": "^0.5.0",
     "parcel": "^2.0.1",
     "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.3",
     "typescript": "^4.5.4"
   },
   "dependencies": {
