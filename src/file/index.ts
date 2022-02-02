@@ -1,4 +1,5 @@
 import { readFile } from 'fs/promises'
+import { join } from 'path'
 
 import { glob as globLib } from 'glob'
 
@@ -19,6 +20,7 @@ export type InputFile = File
 
 export type OutputFile = File & {
   componentName: string
+  tsRelativeImportPath: string
 }
 
 export type ProcessFile = {
@@ -27,21 +29,24 @@ export type ProcessFile = {
 }
 
 export async function fromPaths(
-  _: Options,
+  options: Options,
   filePaths: string[],
 ): Promise<ProcessFile[]> {
   return Promise.all(
     filePaths.map(async (path) => {
       const content = (await readFile(path)).toString()
       const name = getFileName(path)
+      const fullPath = join(options.outputPath, `${name}.tsx`)
+      const tsRelativeImportPath = `./${name}`
 
       return {
         input: { path, name, content },
         output: {
-          path: '',
-          name,
           componentName: capitalize(kebabToCamel(name)),
           content,
+          name,
+          path: fullPath,
+          tsRelativeImportPath,
         },
       }
     }),

@@ -5,7 +5,7 @@ const stage: Stage = async (options, file) => {
     ...file,
     output: {
       ...file.output,
-      content: options.config.replace.reduce(
+      content: options.config.preProcess.replace.reduce(
         (out, replacement) => out.replaceAll(...replacement),
         file.output.content,
       ),

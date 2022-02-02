@@ -1,13 +1,11 @@
 #!/usr/bin/env node
 
-import { writeFile } from 'fs/promises'
-import { join } from 'path'
-
 import { program } from 'commander'
 import pc from 'picocolors'
 
 import { glob } from '~/src/file'
 import * as File from '~/src/file'
+import * as Finalizer from '~/src/finalizer'
 import * as Options from '~/src/options'
 import * as Stage from '~/src/stage'
 import stageSvgToTsx from '~/src/stage/convert/svg-to-tsx'
@@ -23,10 +21,9 @@ import * as Log from '~/src/util/log'
 Log.plain(pc.dim('[svg-to-react]'))
 
 program
-  .version('1.2.0')
+  .version('1.3.0')
   .argument('<input-dir>', 'the input directory to read .svg files from')
   .argument('<output-dir>', 'the output directory to write components to')
-  .option('-t, --template <path>', 'path to an EJS template for the components')
   .option('-c, --config <path>', 'path to an svg-to-react.json config file')
   .parse()
 
@@ -43,6 +40,11 @@ const stages: Stage.Stage[] = [
   stageFormat,
 ]
 
+const finalizers: Finalizer.Finalizer[] = [
+  Finalizer.finalizerWriteFiles,
+  Finalizer.finalizerCreateIndex,
+]
+
 async function main() {
   try {
     const options = await Options.prepare(
@@ -53,15 +55,14 @@ async function main() {
     const filePaths = await glob(`${options.inputPath}/*.svg`)
     const processFiles = await File.fromPaths(options, filePaths)
     const processedFiles = await Stage.runStages(stages, options, processFiles)
-    const writtenFiles = await Promise.all(
-      processedFiles.map(({ output }) =>
-        writeFile(
-          join(options.outputPath, `${output.name}.tsx`),
-          output.content,
-        ),
-      ),
+
+    Finalizer.runFinalizers(finalizers, options, processedFiles)
+
+    Log.success(
+      `Wrote ${pc.bold(processedFiles.length)} component files and ${pc.bold(
+        1,
+      )} index file.`,
     )
-    Log.success(`Wrote ${pc.bold(writtenFiles.length)} files.`)
   } catch (e) {
     if (e instanceof Error) {
       Log.error(e.message)

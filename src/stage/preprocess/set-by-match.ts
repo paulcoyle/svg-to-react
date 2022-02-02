@@ -14,7 +14,7 @@ function instantiatePlugin(config: Config) {
     type: 'perItem' as const,
     active: true,
     fn: (elem: PseudoAstElement) => {
-      config.set.forEach(({ attrs, when }) => {
+      config.preProcess.set.forEach(({ attrs, when }) => {
         let replacements: Record<string, string> = {}
 
         if (when) {

@@ -56,12 +56,23 @@ describe('file module', () => {
         ])
       })
 
-      it('should set an empty path', () => {
+      it('should set the full output path', () => {
         expect(processFiles.map(({ output }) => output.path)).toEqual([
-          '',
-          '',
-          '',
-          '',
+          `${basicOptions.outputPath}/alpha-one.tsx`,
+          `${basicOptions.outputPath}/beta-twoThree.tsx`,
+          `${basicOptions.outputPath}/DeltaFour.tsx`,
+          `${basicOptions.outputPath}/Gamma-Five-Six.tsx`,
+        ])
+      })
+
+      it('should set the relative import path for TypeScript', () => {
+        expect(
+          processFiles.map(({ output }) => output.tsRelativeImportPath),
+        ).toEqual([
+          `./alpha-one`,
+          `./beta-twoThree`,
+          `./DeltaFour`,
+          `./Gamma-Five-Six`,
         ])
       })
 
