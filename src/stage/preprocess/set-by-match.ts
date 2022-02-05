@@ -19,7 +19,7 @@ function instantiatePlugin(config: Config) {
 
         if (when) {
           const match =
-            elem.attributes[when.attr]?.match(new RegExp(when.matches)) ?? null
+            elem.attributes[when.attr]?.match(new RegExp(when.matches)) || null
 
           if (match !== null) {
             Object.entries(attrs).forEach(
@@ -38,7 +38,7 @@ function instantiatePlugin(config: Config) {
           replacements = attrs
         }
 
-        Object.entries(attrs).forEach(([attr, value]) =>
+        Object.entries(replacements).forEach(([attr, value]) =>
           addAttribute(elem, attr, value),
         )
       })
