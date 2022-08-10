@@ -30,7 +30,7 @@ function instantiatePlugin(config: Config) {
                 )),
             )
 
-            if (when.andRemove) {
+            if (when.remove) {
               removeAttribute(elem, when.attr)
             }
           }

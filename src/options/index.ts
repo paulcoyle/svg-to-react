@@ -16,12 +16,33 @@ export type Options = Readonly<{
 
 export type Config = Readonly<{
   preProcess: Readonly<{
+    fromIllustrator: boolean
+    /**
+     * Used to set attributes on elements.
+     */
     set: Readonly<{
+      /**
+       * A key-value map of attributes to set when the `when` conditions are
+       * met.
+       */
       attrs: Record<string, string>
+      /**
+       * The condition under which the values in `attrs` should be applied.
+       */
       when?: Readonly<{
+        /**
+         * The name of the attribute whose value to check.
+         */
         attr: string
+        /**
+         * A regular expression which constitutes a successful match against
+         * the attribute's value.
+         */
         matches: string
-        andRemove?: boolean
+        /**
+         * When true, removes this attribute when it matches.
+         */
+        remove?: boolean
       }>
     }>[]
     replace: [string, string][]
@@ -37,6 +58,7 @@ export type Config = Readonly<{
 
 const defaultConfig: Config = {
   preProcess: {
+    fromIllustrator: true,
     set: [],
     replace: [],
     remove: [],

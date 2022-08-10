@@ -21,7 +21,7 @@ import * as Log from '~/src/util/log'
 Log.plain(pc.dim('[svg-to-react]'))
 
 program
-  .version('1.3.1')
+  .version('1.4.0')
   .argument('<input-dir>', 'the input directory to read .svg files from')
   .argument('<output-dir>', 'the output directory to write components to')
   .option('-c, --config <path>', 'path to an svg-to-react.json config file')
@@ -54,7 +54,20 @@ async function main() {
     )
     const filePaths = await glob(`${options.inputPath}/*.svg`)
     const processFiles = await File.fromPaths(options, filePaths)
-    const processedFiles = await Stage.runStages(stages, options, processFiles)
+
+    const stagesToRun = stages.filter((stage) => {
+      if (stage === stageFromIllustrator) {
+        return options.config.preProcess.fromIllustrator
+      } else {
+        return true
+      }
+    })
+
+    const processedFiles = await Stage.runStages(
+      stagesToRun,
+      options,
+      processFiles,
+    )
 
     Finalizer.runFinalizers(finalizers, options, processedFiles)
 
