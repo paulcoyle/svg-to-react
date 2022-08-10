@@ -15,13 +15,14 @@ import stageFromIllustrator from '~/src/stage/preprocess/from-illustrator'
 import stageReactProps from '~/src/stage/preprocess/react-props'
 import stageReplacement from '~/src/stage/preprocess/replacement'
 import stageSetByMatch from '~/src/stage/preprocess/set-by-match'
+import stageStyleAttrs from '~/src/stage/preprocess/style-attrs'
 import stageSvgCommon from '~/src/stage/preprocess/svg-common'
 import * as Log from '~/src/util/log'
 
 Log.plain(pc.dim('[svg-to-react]'))
 
 program
-  .version('1.4.0')
+  .version('1.4.1')
   .argument('<input-dir>', 'the input directory to read .svg files from')
   .argument('<output-dir>', 'the output directory to write components to')
   .option('-c, --config <path>', 'path to an svg-to-react.json config file')
@@ -35,6 +36,7 @@ const stages: Stage.Stage[] = [
   stageSetByMatch,
   stageReplacement,
   stageReactProps,
+  stageStyleAttrs,
   stageSvgToTsx,
   stageFinalizeReactProps,
   stageFormat,
