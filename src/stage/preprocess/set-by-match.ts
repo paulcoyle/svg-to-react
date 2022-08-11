@@ -16,6 +16,7 @@ function instantiatePlugin(config: Config) {
     fn: (elem: PseudoAstElement) => {
       config.preProcess.set.forEach(({ attrs, when }) => {
         let replacements: Record<string, string> = {}
+        const removals: string[] = []
 
         if (when) {
           const match =
@@ -31,16 +32,22 @@ function instantiatePlugin(config: Config) {
             )
 
             if (when.remove) {
-              removeAttribute(elem, when.attr)
+              removals.push(when.attr)
             }
           }
         } else {
           replacements = attrs
         }
 
-        Object.entries(replacements).forEach(([attr, value]) =>
-          addAttribute(elem, attr, value),
-        )
+        Object.entries(replacements).forEach(([attr, value]) => {
+          if (value.length > 0) {
+            addAttribute(elem, attr, value)
+          } else {
+            removals.push(attr)
+          }
+        })
+
+        removals.forEach((attr) => removeAttribute(elem, attr))
       })
 
       return elem
