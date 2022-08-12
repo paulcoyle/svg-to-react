@@ -31,7 +31,8 @@ export function renameAttribute(
   from: string,
   to: string,
 ) {
-  if (from in elem.attributes) {
+  if (from !== to && from in elem.attributes) {
+    console.log(to, from, elem.attributes[from])
     addAttribute(elem, to, elem.attributes[from])
     removeAttribute(elem, from)
   }

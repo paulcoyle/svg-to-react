@@ -1,18 +1,11 @@
 import { optimize as optimizeSvg } from 'svgo'
 
 import { Stage } from '~/src/stage'
+import { attrToReact } from '~/src/util/react'
 import { PseudoAstElement, renameAttribute } from '~/src/util/svgo'
 
-const attributeToReactMap: Record<string, string> = {
+const specialAttributes: Record<string, string> = {
   class: 'className',
-  'clip-path': 'clipPath',
-  'stop-color': 'stopColor',
-  'stroke-dasharray': 'strokeDasharray',
-  'stroke-linecap': 'strokeLinecap',
-  'stroke-linejoin': 'strokeLinejoin',
-  'stroke-miterlimit': 'strokeMiterlimit',
-  'stroke-width': 'strokeWidth',
-  'xmlns:xlink': 'xmlnsXlink',
 }
 
 const reactPropsPlugin = {
@@ -20,11 +13,11 @@ const reactPropsPlugin = {
   type: 'perItem' as const,
   active: true,
   fn: (elem: PseudoAstElement) => {
-    // Handle common attributes HTML -> React.
-    // Eventually a kebab-case to headlessCamelCase general converter would be
-    // worth implementing (along with stapled:case).
-    Object.entries(attributeToReactMap).forEach(([attr, reactAttr]) =>
+    Object.entries(specialAttributes).forEach(([attr, reactAttr]) =>
       renameAttribute(elem, attr, reactAttr),
+    )
+    Object.entries(elem.attributes).forEach(([attr]) =>
+      renameAttribute(elem, attr, attrToReact(attr)),
     )
     return elem
   },

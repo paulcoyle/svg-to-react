@@ -1,24 +1,27 @@
-/**
- * Totally stolen from:
- * https://github.com/stagas/kebab-to-camel/blob/main/src/index.ts
- */
-export function kebabToCamel(input: string): string {
-  let output = ''
-  for (let i = 0, char = ''; i < input.length; i++) {
-    char = input.charAt(i)
-    if (char === '-') {
-      output += input.charAt(++i).toUpperCase()
-    } else {
-      output += char
-    }
+export function assertString(x: unknown): asserts x is string {
+  if (typeof x !== 'string') {
+    throw new TypeError('Expected string')
   }
-  return output
 }
 
-export function capitalize(input: string): string {
-  if (input.length > 0) {
-    return `${input.charAt(0).toLocaleUpperCase()}${input.slice(1)}`
-  } else {
-    return input
-  }
+export function capitalize(s: string): string {
+  assertString(s)
+  return s.charAt(0).toLocaleUpperCase() + s.substring(1)
+}
+
+function toCamel(delimiter: string, s: string) {
+  assertString(delimiter)
+  assertString(s)
+  const [head, ...tail] = s.split(delimiter)
+  return `${head}${tail.map(capitalize).join('')}`
+}
+
+export function kebabToCamel(s: string) {
+  assertString(s)
+  return toCamel('-', s)
+}
+
+export function stapleToCamel(s: string) {
+  assertString(s)
+  return toCamel(':', s)
 }
