@@ -22,7 +22,7 @@ import * as Log from '~/src/util/log'
 Log.plain(pc.dim('[svg-to-react]'))
 
 program
-  .version('1.4.3')
+  .version('1.4.4')
   .argument('<input-dir>', 'the input directory to read .svg files from')
   .argument('<output-dir>', 'the output directory to write components to')
   .option('-c, --config <path>', 'path to an svg-to-react.json config file')
