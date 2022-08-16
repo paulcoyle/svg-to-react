@@ -4,7 +4,6 @@ export const basicOptions: Options = {
   configPath: '/path/to/config-file.json',
   config: {
     preProcess: {
-      fromIllustrator: true,
       set: [],
       remove: [],
       replace: [],

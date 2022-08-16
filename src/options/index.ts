@@ -16,7 +16,6 @@ export type Options = Readonly<{
 
 export type Config = Readonly<{
   preProcess: Readonly<{
-    fromIllustrator: boolean
     /**
      * Used to set attributes on elements.
      */
@@ -58,7 +57,6 @@ export type Config = Readonly<{
 
 const defaultConfig: Config = {
   preProcess: {
-    fromIllustrator: true,
     set: [],
     replace: [],
     remove: [],

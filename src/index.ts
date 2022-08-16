@@ -11,7 +11,6 @@ import * as Stage from '~/src/stage'
 import stageSvgToTsx from '~/src/stage/convert/svg-to-tsx'
 import stageFinalizeReactProps from '~/src/stage/postprocess/finalize-react-props'
 import stageFormat from '~/src/stage/postprocess/format'
-import stageFromIllustrator from '~/src/stage/preprocess/from-illustrator'
 import stageReactProps from '~/src/stage/preprocess/react-props'
 import stageReplacement from '~/src/stage/preprocess/replacement'
 import stageSetByMatch from '~/src/stage/preprocess/set-by-match'
@@ -22,7 +21,7 @@ import * as Log from '~/src/util/log'
 Log.plain(pc.dim('[svg-to-react]'))
 
 program
-  .version('1.4.4')
+  .version('1.5.0')
   .argument('<input-dir>', 'the input directory to read .svg files from')
   .argument('<output-dir>', 'the output directory to write components to')
   .option('-c, --config <path>', 'path to an svg-to-react.json config file')
@@ -32,7 +31,6 @@ const cliOptions = program.opts()
 
 const stages: Stage.Stage[] = [
   stageSvgCommon,
-  stageFromIllustrator,
   stageSetByMatch,
   stageReplacement,
   stageReactProps,
@@ -57,19 +55,7 @@ async function main() {
     const filePaths = await glob(`${options.inputPath}/*.svg`)
     const processFiles = await File.fromPaths(options, filePaths)
 
-    const stagesToRun = stages.filter((stage) => {
-      if (stage === stageFromIllustrator) {
-        return options.config.preProcess.fromIllustrator
-      } else {
-        return true
-      }
-    })
-
-    const processedFiles = await Stage.runStages(
-      stagesToRun,
-      options,
-      processFiles,
-    )
+    const processedFiles = await Stage.runStages(stages, options, processFiles)
 
     Finalizer.runFinalizers(finalizers, options, processedFiles)
 
